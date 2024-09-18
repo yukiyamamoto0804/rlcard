@@ -60,5 +60,6 @@ class LeducholdemJudger:
                 payoffs.append(each_win - players[i].in_chips)
             else:
                 payoffs.append(float(-players[i].in_chips))
-
+            payoffs[i] += players[i].reward
+        
         return payoffs
