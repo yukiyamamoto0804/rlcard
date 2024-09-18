@@ -10,6 +10,7 @@ class LeducholdemPlayer:
         self.player_id = player_id
         self.status = 'alive'
         self.hand = None
+        self.reward = 0
 
         # The chips that this player has put in until now
         self.in_chips = 0
