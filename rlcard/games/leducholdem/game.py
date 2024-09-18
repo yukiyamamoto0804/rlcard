@@ -107,8 +107,8 @@ class LeducholdemGame(Game):
                 (int): next plater's id
         '''
         # ここを編集すれば各手ごとに報酬を与えられる
-        if action == 'raise'
-            players[self.game_pointer].reward += 0.1
+        if action == 'raise':
+            self.players[self.game_pointer].reward += 0.1
 
         if self.allow_step_back:
             # First snapshot the current state
