@@ -107,15 +107,17 @@ class Env(object):
 
         return state, player_id
 
-    def set_agents(self, agents):
+    def set_agents(self, agents, reward_agent=None):
         '''
         Set the agents that will interact with the environment.
         This function must be called before `run`.
 
         Args:
             agents (list): List of Agent classes
+            reward_agent (Agent)
         '''
         self.agents = agents
+        self.reward_agent = reward_agent
 
     def run(self, is_training=False):
         '''
@@ -144,6 +146,12 @@ class Env(object):
                 action, _ = self.agents[player_id].eval_step(state)
             else:
                 action = self.agents[player_id].step(state)
+            
+            if self.reward_agent is not None:
+                # 目標のモデルと一致するときに報酬を足す
+                reward_action, _ = self.reward_agent.eval_step(state)
+                if action == reward_action:
+                    self.game.players[self.game.game_pointer].reward += 0.1
 
             # Environment steps
             next_state, next_player_id = self.step(action, self.agents[player_id].use_raw)

@@ -6,7 +6,7 @@ import argparse
 import torch
 
 import rlcard
-from rlcard.agents import RandomAgent
+from rlcard.agents import RandomAgent, CFRAgent
 from rlcard.utils import (
     get_device,
     set_seed,
@@ -30,6 +30,15 @@ def train(args):
         config={
             'seed': args.seed,
         }
+    )
+
+    # Initilize CFR Agent
+    reward_agent = CFRAgent(
+        env,
+        os.path.join(
+            args.log_dir_reward,
+            'cfr_model',
+        ),
     )
 
     # Initialize the agent and use random agents as opponents
@@ -64,7 +73,7 @@ def train(args):
     agents = [agent]
     for _ in range(1, env.num_players):
         agents.append(RandomAgent(num_actions=env.num_actions))
-    env.set_agents(agents)
+    env.set_agents(agents, reward_agent)
 
     # Start training
     with Logger(args.log_dir) as logger:
@@ -146,7 +155,7 @@ if __name__ == '__main__':
     parser.add_argument(
         '--num_episodes',
         type=int,
-        default=5000,
+        default=500,
     )
     parser.add_argument(
         '--num_eval_games',
@@ -162,6 +171,12 @@ if __name__ == '__main__':
         '--log_dir',
         type=str,
         default='experiments/leduc_holdem_dqn_result/',
+    )
+
+    parser.add_argument(
+        '--log_dir_reward',
+        type=str,
+        default='experiments/leduc_holdem_cfr_result/',
     )
     
     parser.add_argument(

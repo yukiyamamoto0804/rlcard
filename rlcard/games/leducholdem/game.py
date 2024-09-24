@@ -1,5 +1,7 @@
 import numpy as np
 from copy import copy
+import os
+import pickle
 
 from rlcard.games.leducholdem import Dealer
 from rlcard.games.leducholdem import Player
@@ -7,6 +9,9 @@ from rlcard.games.leducholdem import Judger
 from rlcard.games.leducholdem import Round
 
 from rlcard.games.limitholdem import Game
+
+from rlcard.agents.cfr_agent import CFRAgent
+from rlcard.utils.utils import *
 
 class LeducholdemGame(Game):
 
@@ -106,9 +111,6 @@ class LeducholdemGame(Game):
                 (dict): next player's state
                 (int): next plater's id
         '''
-        # ここを編集すれば各手ごとに報酬を与えられる
-        if action == 'raise':
-            self.players[self.game_pointer].reward += 0.1
 
         if self.allow_step_back:
             # First snapshot the current state
