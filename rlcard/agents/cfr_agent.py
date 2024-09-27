@@ -161,6 +161,21 @@ class CFRAgent():
 
         return action, info
 
+    def step(self, state):
+        ''' Given a state, predict action based on average policy
+
+        Args:
+            state (numpy.array): State representation
+
+        Returns:
+            action (int): Predicted action
+            info (dict): A dictionary containing information
+        '''
+        probs = self.action_probs(state['obs'].tostring(), list(state['legal_actions'].keys()), self.average_policy)
+        action = np.random.choice(len(probs), p=probs)
+
+        return action
+
     def get_state(self, player_id):
         ''' Get state_str of the player
 
